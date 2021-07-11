@@ -1,4 +1,5 @@
 import random
+import os
 
 def roll():
     x = random.randrange(0,999)
@@ -51,38 +52,39 @@ def work(a, b):
         # Make sure to insult the player for working just to gamble :)
         print("You tap danced with a rat for 10 dollars.")
         wallet += 10
-        print("You currently have {} in your wallet.".format(wallet))
+        print("You currently have {} in your wallet.\n".format(wallet))
         
     elif x > 40 and x <= 80:
         print("You won rock paper scissors against an amputee for 15 dollars.")
         wallet += 15
-        print("You currently have {} in your wallet.".format(wallet))
+        print("You currently have {} in your wallet.\n".format(wallet))
 
     elif x > 80 and x <= 90:
         print("You licked Warren Buffett's shoe for 20 dollars.")
         wallet += 20
-        print("You currently have {} in your wallet.".format(wallet))
+        print("You currently have {} in your wallet.\n".format(wallet))
 
     else:
         print("You trolled the IMF for 25 dollars.")
         wallet += 25
-        print("You currently have {} in your wallet.".format(wallet))
+        print("You currently have {} in your wallet.\n".format(wallet))
     
 def core():
-    global playing, wallet
+    global playing, wallet, workaddbuff, workmultbuff
     switchers = {
         1: "Gamble",
         2: "Work",
         3: "Buy",
         4: "Craft",
         5: "Check Wallet",
-        6: "Exit"
-        7: "Save"
+        6: "Save",
+        7: "Load",
+        8: "Exit"
     }
 
     print("\n=========================")
     print("How can I help you today?")
-    numplace = int(input("  1: Gamble,\n  2: Work,\n  3: Buy,\n  4: Craft,\n  5: Check Wallet,\n  6: Exit\n"))
+    numplace = int(input("  1: Gamble,\n  2: Work,\n  3: Buy,\n  4: Craft,\n  5: Check Wallet,\n  6: Save,\n  7: Load,\n  8: Exit\n"))
 
     place = switchers.get(numplace)
 
@@ -98,13 +100,25 @@ def core():
         print("Coming soon!")
         pass
     elif place == "Check Wallet":
-        print("You currently have {} in your wallet.".format(wallet))
+        print("\nYou currently have {} in your wallet.".format(wallet))
         pass
+    elif place == "Save":
+        f = open("save.txt", "w")
+        # Save format will be a list of numbers. In order:
+        # [wallet, workaddbuff, workmultbuff] (betaddbuff and betmultbuff will be added later)
+        f.write("{}\n{}\n{}".format(wallet,workaddbuff,workmultbuff))
+        f.close()
+    elif place == "Load":
+        # Load the saved file and strip the \n from the variables
+        f = open("save.txt", "r")
+        f = f.readlines()
+        f = [x.strip() for x in f]
+        wallet, workaddbuff, workmultbuff = f[0], f[1], f[2]
     elif place == "Exit":
-        print("See ya next time, chief!")
+        print("\nSee ya next time, chief!")
         playing = False
     else:
-        print("Sorry, I didn't catch that. Come again?")
+        print("\nSorry, I didn't catch that. Come again?")
         pass
 
 def buy():
@@ -117,5 +131,3 @@ workaddbuff, workmultbuff = 0, 1
 
 while playing == True:
     core()
-#ask()
-#widebet(betmoney, betoutcome)
